@@ -1,10 +1,12 @@
 # coding: utf-8
-# import json
 import base64
 import requests
 
-class Vasttrafik():
+class Reseplaneraren():
     def __init__(self, key, secret, scope):
+        if key == None or secret == None or scope == None:
+            raise TypeError("Usage: Reseplaneraren(<key>, <secret>, <scope>)")
+
         if type(key) != str:
             raise TypeError("Expected str [key]")
         if type(secret) != str:
