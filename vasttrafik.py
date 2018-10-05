@@ -83,7 +83,26 @@ class Vasttrafik():
         return response.json()
 
 
-    
+    def location_allstops(self, **kwargs):
+        header = {"Authorization": self.token}
+        url = "https://api.vasttrafik.se/bin/rest.exe/v2/location.allstops"
+        kwargs["format"] = "json"
+
+        response = requests.get(url, headers=header, params=kwargs)
+        response = self.__check_response(response)
+
+        return response.json()
+
+
+    def location_name(self, **kwargs):
+        header = {"Authorization": self.token}
+        url = "https://api.vasttrafik.se/bin/rest.exe/v2/location.name"
+        kwargs["format"] = "json"
+
+        response = requests.get(url, headers=header, params=kwargs)
+        response = self.__check_response(response)
+
+        return response.json()
 
 
 
@@ -92,4 +111,6 @@ with open("credentials.csv", "r") as f:
     key, secret = f.read().split(",")
 vt = Vasttrafik(key, secret, 0)
 
-print(vt.trip(originId=9021014001960000, destId=9021014005470000, date=20181020, time="15:24"))
+stop1 = vt.location_name(input="Chalmers").get("LocationList").get("StopLocation")[0].get("id")
+stop2 = vt.location_name(input="Kampenhof").get("LocationList").get("StopLocation")[0].get("id")
+print(vt.trip(originId=stop1, destId=stop2, date=20181020, time="15:24"))
