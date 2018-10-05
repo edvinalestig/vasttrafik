@@ -1,5 +1,5 @@
 # coding: utf-8
-import json
+# import json
 import base64
 import requests
 
@@ -36,9 +36,29 @@ class Vasttrafik():
         self.token = "Bearer " + response_dict.get("access_token")
 
 
-    def trip(self, **kwargs)
+    def trip(self, **kwargs):
+        header = {"Authorization": self.token}
+        url = "https://api.vasttrafik.se/bin/rest.exe/v2/trip"
+        kwargs["format"] = "json"
+        response = requests.get(url, headers=header, params=kwargs)
+
+        print(response.url)
+        print(response.status_code)
+        print(response.text)
+        if response.status_code == 401:
+            self.__renew_token()
+            response = requests.get(url, headers=header, params=kwargs)
+
+        response_dict = response.json()
+        if response.status_code != 200:
+            raise requests.exceptions.HTTPError(f'{response.status_code} {response_dict.get("error_description")}')
+
+        return response_dict
+
 
 
 with open("credentials.csv", "r") as f:
     key, secret = f.read().split(",")
 vt = Vasttrafik(key, secret, 0)
+
+print(vt.trip(originId=9021014001960000, destId=9021014005470000, date=20181020, time="15:24"))
