@@ -105,6 +105,15 @@ class Vasttrafik():
         return response.json()
 
 
+    def systeminfo(self, **kwargs):
+        header = {"Authorization": self.token}
+        url = "https://api.vasttrafik.se/bin/rest.exe/v2/systeminfo"
+        kwargs["format"] = "json"
+
+        response = requests.get(url, headers=header, params=kwargs)
+        response = self.__check_response(response)
+
+        return response.json()
 
 
 with open("credentials.csv", "r") as f:
