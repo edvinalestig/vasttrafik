@@ -171,11 +171,11 @@ class Reseplaneraren():
         return response.json()
 
 
+if __name__ == "__main__":
+    with open("credentials.csv", "r") as f:
+        key, secret = f.read().split(",")
+    vt = Vasttrafik(key, secret, 0)
 
-with open("credentials.csv", "r") as f:
-    key, secret = f.read().split(",")
-vt = Vasttrafik(key, secret, 0)
-
-stop1 = vt.location_name(input="Chalmers").get("LocationList").get("StopLocation")[0].get("id")
-stop2 = vt.location_name(input="Kampenhof").get("LocationList").get("StopLocation")[0].get("id")
-print(vt.trip(originId=stop1, destId=stop2, date=20181020, time="15:24"))
+    stop1 = vt.location_name(input="Chalmers").get("LocationList").get("StopLocation")[0].get("id")
+    stop2 = vt.location_name(input="Kampenhof").get("LocationList").get("StopLocation")[0].get("id")
+    print(vt.trip(originId=stop1, destId=stop2, date=20181020, time="15:24"))
