@@ -116,6 +116,17 @@ class Vasttrafik():
         return response.json()
 
 
+    def livemap(self, **kwargs):
+        header = {"Authorization": self.token}
+        url = "https://api.vasttrafik.se/bin/rest.exe/v2/livemap"
+        kwargs["format"] = "json"
+
+        response = requests.get(url, headers=header, params=kwargs)
+        response = self.__check_response(response)
+
+        return response.json()
+
+
 with open("credentials.csv", "r") as f:
     key, secret = f.read().split(",")
 vt = Vasttrafik(key, secret, 0)
