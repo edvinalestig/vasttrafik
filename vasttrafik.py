@@ -183,13 +183,63 @@ class Reseplaneraren():
         return response.json()
 
 
+class TrafficSituations():
+    def __init__(self, auth):
+        if type(auth) != Auth:
+            raise TypeError("Expected Auth object")
+        self.auth = auth
+        self.url = "https://api.vasttrafik.se/ts/v1/traffic-situations"
+
+    
+    def __get(self, url):
+        header = {"Authorization": self.auth.token}
+        response = requests.get(url, headers=header)
+        response = self.auth.check_response(response)
+
+        return response.json()
+
+    
+    def trafficsituations(self):
+        url = self.url
+        return self.__get(url)
+
+
+    def stoppoint(self, gid):
+        url = self.url + f'/stoppoint/{gid}'
+        return self.__get(url)
+
+
+    def situation(self, gid):
+        url = self.url + f'/{gid}'
+        return self.__get(url)
+
+
+    def line(self, gid):
+        url = self.url + f'/line/{gid}'
+        return self.__get(url)
+
+
+    def journey(self, gid):
+        url = self.url + f'/journey/{gid}'
+        return self.__get(url)
+
+
+    def stoparea(self, gid):
+        url = self.url + f'/stoparea/{gid}'
+        return self.__get(url)
+
+
 if __name__ == "__main__":
     with open("credentials.csv", "r") as f:
         key, secret = f.read().split(",")
 
     auth = Auth(key, secret, 0)
-    vt = Reseplaneraren(auth)
+    ts = TrafficSituations(auth)
+    # vt = Reseplaneraren(auth)
 
-    stop1 = vt.location_name(input="Chalmers").get("LocationList").get("StopLocation")[0].get("id")
-    stop2 = vt.location_name(input="Kampenhof").get("LocationList").get("StopLocation")[0].get("id")
-    print(vt.trip(originId=stop1, destId=stop2, date=20190215, time="15:24"))
+    s = ts.trafficsituations()[0]
+    print(s)
+    # stop1 = vt.location_name(input="Kungssten").get("LocationList").get("StopLocation")[0].get("id")
+    # print(ts.stoppoint(9022014001040002))
+    # stop2 = vt.location_name(input="Kampenhof").get("LocationList").get("StopLocation")[0].get("id")
+    # print(vt.trip(originId=stop1, destId=stop2, date=20190215, time="15:24"))
