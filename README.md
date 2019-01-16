@@ -7,7 +7,8 @@ A small python module for communicating with the Västtrafik API. This module is
 
 ### Using the API
 Each user should have its own scope (a number). Then each user will have its own token and you can get user statistics on the dev portal.
-```import vasttrafik
+```
+import vasttrafik
 auth = vasttrafik.Auth(key, secret, scope)
 resepl = vasttrafik.Reseplaneraren(auth)
 trafficsit = vasttrafik.TrafficSituations(auth)
